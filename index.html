@@ -969,6 +969,16 @@ html.ui-compact .limit-box p, html.ui-compact #tour-body p { font-size: 1.15rem;
     html.ui-compact .mode-toggle-btn, html.ui-compact .current-player-btn { order: 1; flex: 0 1 auto; }
 }
 
+/* ===== تحسينات توافق جميع الشاشات ===== */
+html.ui-compact .tab-btn .tab-l { font-size: max(0.78rem, 12px); }
+html.ui-compact .ch-week { font-size: max(0.75rem, 12px); }
+html.ui-compact .player-info .pi-small, html.ui-compact .ac-n { font-size: max(0.85rem, 12px); }
+html.ui-compact #q-type, html.ui-compact #q-diff, html.ui-compact #q-chapter { font-size: max(0.82rem, 12px); }
+html.ui-touch .mode-toggle-btn, html.ui-touch .current-player-btn, html.ui-touch #lang-btn, html.ui-touch #vol-btn,
+html.ui-touch [id^="lvl-"], html.ui-touch #quiz-mode-btn, html.ui-touch #scope-btn, html.ui-touch .life-btn, html.ui-touch .cert-btn { min-height: 40px; }
+html.ui-touch #vol-btn { min-width: 40px; }
+html.ui-touch #screen-players button { min-width: 40px; min-height: 40px; }
+html.ui-compact .tile-d, html.ui-compact .lb-chip, html.ui-compact .lb-title-badge, html.ui-compact .pi-d, html.ui-compact .bc-d { font-size: max(0.85rem, 12px); }
     </style>
 </head>
 <body>
@@ -1328,13 +1338,14 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
         function fitRoot() {
             var w = window.innerWidth || 1920, h = window.innerHeight || 1080;
             var root = document.documentElement, touch = isTouchDevice();
-            var tv = w >= 1100 && w / h >= 1.3 && h >= 560;
+            // تلفاز: شاشة أفقية واسعة. الشاشات اللمسية الأصغر من 1600 تبقى مدمجة لسهولة اللمس؛ وتلفزيونات 960×540 تُعامل كتلفاز
+            var tv = touch ? (w >= 1600 && w / h >= 1.3) : ((w >= 1100 && w / h >= 1.3 && h >= 560) || (w >= 900 && h >= 500 && w / h >= 1.6));
             var mode = tv ? 'tv' : 'compact';
             root.classList.toggle('ui-tv', tv);
             root.classList.toggle('ui-compact', !tv);
             root.classList.toggle('ui-touch', touch);
             root.classList.toggle('ui-typing', !tv || !touch);
-            root.style.fontSize = tv ? Math.min(w / 89.3, h / 50.2) + 'px' : Math.max(14, Math.min(17, w / 24)) + 'px';
+            root.style.fontSize = tv ? Math.min(w / 89.3, h / 50.2) + 'px' : Math.max(14, Math.min(w / 24, Math.max(17, Math.min(w / 52, h / 45)))) + 'px';
             var cols = mapColsFor(w);
             root.style.setProperty('--map-cols', cols);
             root.style.setProperty('--tile-cols', w >= 1000 ? 4 : (w >= 600 ? 3 : 2));
